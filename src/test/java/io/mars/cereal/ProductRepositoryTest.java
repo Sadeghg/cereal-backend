@@ -55,12 +55,12 @@ public class ProductRepositoryTest {
         Product product = new Product("TV", 330D);
 
         //when
-        when(repository.save(any(Product.class))).thenReturn(Optional.of(product));
+        when(repository.save(any(Product.class))).thenReturn(product);
 
         //then
-        Optional<Product> saveResult = repository.save(product);
-        assertTrue(saveResult.isPresent());
-        assertEquals(saveResult.get().getName(), product.getName());
+        Product saveResult = repository.save(product);
+        assertNull(saveResult.getId());
+        assertEquals(saveResult.getName(), product.getName());
     }
 
     @Test
@@ -86,14 +86,13 @@ public class ProductRepositoryTest {
 
         //when
         Product updateProduct = new Product(product.getId(), product.getName(), 600D, sony, product.getDetails());
-        when(repository.save(any(Product.class))).thenReturn(Optional.of(updateProduct));
+        when(repository.save(any(Product.class))).thenReturn(updateProduct);
 
         //then
-        Optional<Product> result = repository.save(updateProduct);
-        assertTrue(result.isPresent());
-        assertEquals(result.get().getId(), product.getId());
-        assertNotEquals(result.get().getPrice(), product.getPrice());
-        assertNotEquals(result.get().getCompany().getId(), product.getCompany().getId());
+        Product result = repository.save(updateProduct);
+        assertEquals(result.getId(), product.getId());
+        assertNotEquals(result.getPrice(), product.getPrice());
+        assertNotEquals(result.getCompany().getId(), product.getCompany().getId());
     }
 
     @Test

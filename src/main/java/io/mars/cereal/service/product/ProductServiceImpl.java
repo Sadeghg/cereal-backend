@@ -3,30 +3,28 @@ package io.mars.cereal.service.product;
 import io.mars.cereal.data.product.ProductRepository;
 import io.mars.cereal.model.Product;
 import io.mars.cereal.model.exception.ContentNotFound;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    private ProductRepository repository;
+    private final ProductRepository repository;
 
     @Override
     public Product save(Product product) {
-        return repository.save(product)
-                .orElseThrow(() -> new ContentNotFound("no such product found"));
+        return repository.save(product);
     }
 
     @Override
-    public Collection<Product> saveAll(Collection<Product> products) {
+    public Iterable<Product> saveAll(Iterable<Product> products) {
         return repository.saveAll(products);
-    }
-
-    @Override
-    public Collection<Product> saveAll(Product... t) {
-        return repository.saveAll(t);
     }
 
     @Override
@@ -36,23 +34,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Collection<Product> findAll(Collection<Long> ids) {
-        return repository.findAll(ids);
+    public Iterable<Product> findAllById(Iterable<Long> ids) {
+        return repository.findAllById(ids);
     }
 
     @Override
-    public Collection<Product> findAll(Long... ids) {
-        return repository.findAll(ids);
-    }
-
-    @Override
-    public void deleteAll(Collection<Long> ids) {
-        repository.deleteAll(ids);
-    }
-
-    @Override
-    public void deleteAll(Long... ids) {
-        repository.deleteAll(ids);
+    public void deleteAllById(Iterable<Long> ids) {
+        repository.deleteAllById(ids);
     }
 
     @Override

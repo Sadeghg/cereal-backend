@@ -6,18 +6,13 @@ public interface GenericService <T, ID>{
 
     T save(T t);
 
-    Collection<T> saveAll(Collection<T> t);
-
-    Collection<T> saveAll(T... t);
+    Iterable<T> saveAll(Iterable<T> t);
 
     T findById(ID id);
 
-    Collection<T> findAll(Collection<ID> ids);
+    Iterable<T> findAllById(Iterable<ID> ids);
 
-    Collection<T> findAll(ID... ids);
+    void deleteAllById(Iterable<ID> ids);
 
-    void deleteAll(Collection<ID> ids);
-
-    void deleteAll(ID... ids);
     void delete(ID id);
 }

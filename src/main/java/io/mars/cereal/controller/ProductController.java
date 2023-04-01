@@ -1,12 +1,17 @@
 package io.mars.cereal.controller;
 
 import io.mars.cereal.model.Product;
+import io.mars.cereal.service.product.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/product/")
 public class ProductController {
+
+    private final ProductService service;
 
     @GetMapping("{id}")
     public ResponseEntity<Product> findById(@PathVariable Long id) {
@@ -15,7 +20,7 @@ public class ProductController {
 
     @PostMapping("save")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        return null;
+        return ResponseEntity.ok(service.save(product));
     }
 
     @PutMapping("update")
