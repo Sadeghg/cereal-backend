@@ -13,9 +13,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class Product {
 
-    public Product(String name, Double price){
+    public Product(String name){
         this.name = name;
-        this.price = price;
     }
 
     @Id
@@ -26,9 +25,6 @@ public class Product {
 
     @Column(name = "product_name", columnDefinition = "TEXT")
     private String name;
-
-    @Column(name = "product_price", nullable = false)
-    private Double price;
 
     @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "company_fk_id"), nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)

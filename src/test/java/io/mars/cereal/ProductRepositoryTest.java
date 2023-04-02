@@ -42,9 +42,9 @@ public class ProductRepositoryTest {
         Map<String, String> iphoneDetails =
                 Map.of("weight", "200 grams", "original", "yes", "color", "rose gold");
 
-        Product oledTv = new Product(10L, "OLED TV", 770D, lg, tvDetails);
-        Product playStation = new Product(20L, "PS5", 700D, sony, playstationDetails);
-        Product iphone = new Product(30L, "Iphone 12 PRO MAX", 1000D, apple, iphoneDetails);
+        Product oledTv = new Product(10L, "OLED TV", lg, tvDetails);
+        Product playStation = new Product(20L, "PS5", sony, playstationDetails);
+        Product iphone = new Product(30L, "Iphone 12 PRO MAX", apple, iphoneDetails);
 
         products = List.of(oledTv, playStation, iphone);
     }
@@ -52,7 +52,7 @@ public class ProductRepositoryTest {
     @Test
     public void saveProduct(){
         //given
-        Product product = new Product("TV", 330D);
+        Product product = new Product("TV");
 
         //when
         when(repository.save(any(Product.class))).thenReturn(product);
@@ -85,13 +85,12 @@ public class ProductRepositoryTest {
         Company sony = new Company(50L , "SONY");
 
         //when
-        Product updateProduct = new Product(product.getId(), product.getName(), 600D, sony, product.getDetails());
+        Product updateProduct = new Product(product.getId(), product.getName(), sony, product.getDetails());
         when(repository.save(any(Product.class))).thenReturn(updateProduct);
 
         //then
         Product result = repository.save(updateProduct);
         assertEquals(result.getId(), product.getId());
-        assertNotEquals(result.getPrice(), product.getPrice());
         assertNotEquals(result.getCompany().getId(), product.getCompany().getId());
     }
 

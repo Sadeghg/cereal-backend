@@ -64,9 +64,9 @@ public class ProductControllerTest {
         Map<String, String> iphoneDetails =
                 Map.of("weight", "200 grams", "original", "yes", "color", "rose gold");
 
-        Product oledTv = new Product(10L, "OLED TV", 770D, lg, tvDetails);
-        Product playStation = new Product(20L, "PS5", 700D, sony, playstationDetails);
-        Product iphone = new Product(30L, "Iphone 12 PRO MAX", 1000D, apple, iphoneDetails);
+        Product oledTv = new Product(10L, "OLED TV", lg, tvDetails);
+        Product playStation = new Product(20L, "PS5", sony, playstationDetails);
+        Product iphone = new Product(30L, "Iphone 12 PRO MAX", apple, iphoneDetails);
 
         productList = List.of(oledTv, playStation, iphone);
     }
@@ -77,7 +77,7 @@ public class ProductControllerTest {
         Company sony = new Company(50L, "SONY");
         Map<String, String> playstationDetails =
                 Map.of("weight", "4 kg", "power", "330", "color", "glacier white");
-        Product playStation = new Product(20L, "PS5", 700D, sony, playstationDetails);
+        Product playStation = new Product(20L, "PS5", sony, playstationDetails);
 
         //when
         when(service.save(playStation)).thenReturn(playStation);
@@ -97,7 +97,7 @@ public class ProductControllerTest {
         Company sony = new Company(50L, "SONY");
         Map<String, String> playstationDetails =
                 Map.of("weight", "3 kg", "power", "270", "color", "black mate");
-        Product playStation = new Product(20L, "PS4", 500D, sony, playstationDetails);
+        Product playStation = new Product(20L, "PS4", sony, playstationDetails);
 
         //when
         when(service.findById(20L)).thenReturn(playStation);
@@ -116,7 +116,7 @@ public class ProductControllerTest {
         Company lg = new Company(40L,"LG");
         Map<String, String> tvDetails =
                 Map.of("weight", "2 kg", "original", "yes", "power", "130");
-        Product oledTv = new Product(10L, "OLED TV", 770D, lg, tvDetails);
+        Product oledTv = new Product(10L, "OLED TV", lg, tvDetails);
 
         //when
         when(service.save(oledTv)).thenReturn(oledTv);
