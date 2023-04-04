@@ -67,7 +67,7 @@ public class ProductServiceTest {
         Collection<Product> products = List.of(playStation, iphone);
 
         //when
-        when(repository.saveAll((Iterable<Product>) any())).thenReturn(products);
+        when(repository.saveAll(any())).thenReturn(products);
 
         //then
         List<Product> resultList = (List<Product>) productService.saveAll(products);

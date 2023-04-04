@@ -5,11 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class CardItem {
-
-    public static CardItem cardItem(){
-        return new CardItem();
-    }
+public class CartItem {
 
     @Id
     @SequenceGenerator(name="cuteSequence", sequenceName = "cuteSequence"
@@ -25,7 +21,7 @@ public class CardItem {
 
     @JoinColumn(name = "card_id", foreignKey = @ForeignKey(name = "card_fk_id"))
     @ManyToOne(fetch = FetchType.EAGER)
-    private Card card;
+    private Cart cart;
 
     @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "product_fk_id"))
     @ManyToOne(fetch = FetchType.EAGER)

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Card {
+public class Cart {
 
     @Id
     @SequenceGenerator(name="cuteSequence", sequenceName = "cuteSequence"

@@ -27,6 +27,6 @@ public class Invoice {
                     referencedColumnName = "id",
                     foreignKey = @ForeignKey(name = "invoice_item_fk")
             )})
-    private List<CardItem> invoiceItemList;
+    private List<CartItem> invoiceItemList;
 
 }
