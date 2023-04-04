@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import io.mars.cereal.controller.ProductController;
 import io.mars.cereal.model.Company;
-import io.mars.cereal.model.Details;
 import io.mars.cereal.model.Product;
 import io.mars.cereal.service.product.ProductService;
 import org.aspectj.lang.annotation.Before;
@@ -58,16 +57,16 @@ public class ProductControllerTest {
         Company sony = new Company(50L, "SONY");
         Company apple = new Company(60L, "Apple");
 
-        List<Details> tvDetails =
-                Details.of("weight", "2 kg", "original", "yes", "power", "130");
-        List<Details> playstationDetails =
-                Details.of("weight", "4 kg", "original", "yes", "power", "330", "color", "glacier white");
-        List<Details> iphoneDetails =
-                Details.of("weight", "200 grams", "original", "yes", "color", "rose gold");
+        Map<String, String> tvDetails =
+                Map.of("weight", "2 kg", "original", "yes", "power", "130");
+        Map<String, String> playstationDetails =
+                Map.of("weight", "4 kg", "original", "yes", "power", "330", "color", "glacier white");
+        Map<String, String> iphoneDetails =
+                Map.of("weight", "200 grams", "original", "yes", "color", "rose gold");
 
-        Product oledTv = new Product("OLED TV", lg, tvDetails);
-        Product playStation = new Product("PS5", sony, playstationDetails);
-        Product iphone = new Product("Iphone 12 PRO MAX", apple, iphoneDetails);
+        Product oledTv = new Product(10L, "OLED TV", lg, tvDetails);
+        Product playStation = new Product(20L, "PS5", sony, playstationDetails);
+        Product iphone = new Product(30L, "Iphone 12 PRO MAX", apple, iphoneDetails);
 
         productList = List.of(oledTv, playStation, iphone);
     }
@@ -76,9 +75,9 @@ public class ProductControllerTest {
     public void saveProduct() throws Exception {
         //given
         Company sony = new Company(50L, "SONY");
-        List<Details> playstationDetails =
-                Details.of("weight", "4 kg", "power", "330", "color", "glacier white");
-        Product playStation = new Product("PS5", sony, playstationDetails);
+        Map<String, String> playstationDetails =
+                Map.of("weight", "4 kg", "power", "330", "color", "glacier white");
+        Product playStation = new Product(20L, "PS5", sony, playstationDetails);
 
         //when
         when(service.save(playStation)).thenReturn(playStation);
@@ -96,9 +95,9 @@ public class ProductControllerTest {
     public void findById() throws Exception {
         //given
         Company sony = new Company(50L, "SONY");
-       List<Details> playstationDetails =
-               Details.of("weight", "3 kg", "power", "270", "color", "black mate");
-        Product playStation = new Product("PS4", sony, playstationDetails);
+        Map<String, String> playstationDetails =
+                Map.of("weight", "3 kg", "power", "270", "color", "black mate");
+        Product playStation = new Product(20L, "PS4", sony, playstationDetails);
 
         //when
         when(service.findById(20L)).thenReturn(playStation);
@@ -115,9 +114,9 @@ public class ProductControllerTest {
     public void updateProduct() throws Exception {
         //given
         Company lg = new Company(40L,"LG");
-       List<Details> tvDetails =
-                Details.of("weight", "2 kg", "original", "yes", "power", "130");
-        Product oledTv = new Product("OLED TV", lg, tvDetails);
+        Map<String, String> tvDetails =
+                Map.of("weight", "2 kg", "original", "yes", "power", "130");
+        Product oledTv = new Product(10L, "OLED TV", lg, tvDetails);
 
         //when
         when(service.save(oledTv)).thenReturn(oledTv);
