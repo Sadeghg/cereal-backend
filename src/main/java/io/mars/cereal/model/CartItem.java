@@ -16,16 +16,13 @@ public class CartItem {
     @Column(name = "item_quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "item_price", nullable = false)
-    private Double price;
-
-    @JoinColumn(name = "card_id", foreignKey = @ForeignKey(name = "card_fk_id"))
+    @JoinColumn(name = "cart_id", foreignKey = @ForeignKey(name = "cart_fk_id"))
     @ManyToOne(fetch = FetchType.EAGER)
     private Cart cart;
 
-    @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "product_fk_id"))
+    @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "product_item_fk_id"))
     @ManyToOne(fetch = FetchType.EAGER)
-    private Product product;
+    private ShopItem item;
 
 
 }
