@@ -2,6 +2,7 @@ package io.mars.cereal;
 
 import io.mars.cereal.data.product.ProductRepository;
 import io.mars.cereal.model.Company;
+import io.mars.cereal.model.Detail;
 import io.mars.cereal.model.Product;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,12 +31,12 @@ public class ProductRepositoryTest {
         Company sony = new Company(50L, "SONY");
         Company apple = new Company(60L, "Apple");
 
-        Map<String, String> tvDetails =
-                Map.of("weight", "2 kg", "original", "yes", "power", "130");
-        Map<String, String> playstationDetails =
-                Map.of("weight", "4 kg", "original", "yes", "power", "330", "color", "glacier white");
-        Map<String, String> iphoneDetails =
-                Map.of("weight", "200 grams", "original", "yes", "color", "rose gold");
+        List<Detail> tvDetails =
+               Detail.of("weight", "2 kg", "original", "yes", "power", "130");
+        List<Detail> playstationDetails =
+               Detail.of("weight", "4 kg", "original", "yes", "power", "330", "color", "glacier white");
+        List<Detail> iphoneDetails =
+               Detail.of("weight", "200 grams", "original", "yes", "color", "rose gold");
 
         Product oledTv = new Product(10L, "OLED TV", lg, tvDetails);
         Product playStation = new Product(20L, "PS5", sony, playstationDetails);

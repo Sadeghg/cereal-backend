@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import io.mars.cereal.controller.ProductController;
 import io.mars.cereal.model.Company;
+import io.mars.cereal.model.Detail;
 import io.mars.cereal.model.Product;
 import io.mars.cereal.service.product.ProductService;
 import org.aspectj.lang.annotation.Before;
@@ -57,12 +58,12 @@ public class ProductControllerTest {
         Company sony = new Company(50L, "SONY");
         Company apple = new Company(60L, "Apple");
 
-        Map<String, String> tvDetails =
-                Map.of("weight", "2 kg", "original", "yes", "power", "130");
-        Map<String, String> playstationDetails =
-                Map.of("weight", "4 kg", "original", "yes", "power", "330", "color", "glacier white");
-        Map<String, String> iphoneDetails =
-                Map.of("weight", "200 grams", "original", "yes", "color", "rose gold");
+        List<Detail> tvDetails =
+               Detail.of("weight", "2 kg", "original", "yes", "power", "130");
+        List<Detail> playstationDetails =
+               Detail.of("weight", "4 kg", "original", "yes", "power", "330", "color", "glacier white");
+        List<Detail> iphoneDetails =
+               Detail.of("weight", "200 grams", "original", "yes", "color", "rose gold");
 
         Product oledTv = new Product(10L, "OLED TV", lg, tvDetails);
         Product playStation = new Product(20L, "PS5", sony, playstationDetails);
@@ -75,8 +76,8 @@ public class ProductControllerTest {
     public void saveProduct() throws Exception {
         //given
         Company sony = new Company(50L, "SONY");
-        Map<String, String> playstationDetails =
-                Map.of("weight", "4 kg", "power", "330", "color", "glacier white");
+        List<Detail> playstationDetails =
+               Detail.of("weight", "4 kg", "power", "330", "color", "glacier white");
         Product playStation = new Product(20L, "PS5", sony, playstationDetails);
 
         //when
@@ -95,8 +96,8 @@ public class ProductControllerTest {
     public void findById() throws Exception {
         //given
         Company sony = new Company(50L, "SONY");
-        Map<String, String> playstationDetails =
-                Map.of("weight", "3 kg", "power", "270", "color", "black mate");
+        List<Detail> playstationDetails =
+               Detail.of("weight", "3 kg", "power", "270", "color", "black mate");
         Product playStation = new Product(20L, "PS4", sony, playstationDetails);
 
         //when
@@ -114,8 +115,8 @@ public class ProductControllerTest {
     public void updateProduct() throws Exception {
         //given
         Company lg = new Company(40L,"LG");
-        Map<String, String> tvDetails =
-                Map.of("weight", "2 kg", "original", "yes", "power", "130");
+        List<Detail> tvDetails =
+               Detail.of("weight", "2 kg", "original", "yes", "power", "130");
         Product oledTv = new Product(10L, "OLED TV", lg, tvDetails);
 
         //when

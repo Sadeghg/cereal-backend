@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -37,5 +38,5 @@ public class Product {
                     referencedColumnName = "id",
                     foreignKey = @ForeignKey(name = "product_details_fk"))
             })
-    private Map<String, String> details;
+    private List<Detail> details;
 }

@@ -2,6 +2,7 @@ package io.mars.cereal;
 
 import io.mars.cereal.data.product.ProductRepository;
 import io.mars.cereal.model.Company;
+import io.mars.cereal.model.Detail;
 import io.mars.cereal.model.Product;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,8 +36,8 @@ public class ProductServiceTest {
     public void saveProduct() {
         //given
         Company sony = new Company(50L, "SONY");
-        Map<String, String> playstationDetails =
-                Map.of("weight", "4 kg", "power", "330", "color", "glacier white");
+        List<Detail> playstationDetails =
+               Detail.of("weight", "4 kg", "power", "330", "color", "glacier white");
         Product playStation = new Product(20L, "PS5", sony, playstationDetails);
 
         //when
@@ -56,10 +57,10 @@ public class ProductServiceTest {
         Company sony = new Company(50L, "SONY");
         Company apple = new Company(60L, "Apple");
 
-        Map<String, String> playstationDetails =
-                Map.of("weight", "4 kg", "original", "yes", "power", "330", "color", "glacier white");
-        Map<String, String> iphoneDetails =
-                Map.of("weight", "200 grams", "original", "yes", "color", "rose gold");
+        List<Detail> playstationDetails =
+               Detail.of("weight", "4 kg", "original", "yes", "power", "330", "color", "glacier white");
+        List<Detail> iphoneDetails =
+               Detail.of("weight", "200 grams", "original", "yes", "color", "rose gold");
 
         Product playStation = new Product(20L, "PS5", sony, playstationDetails);
         Product iphone = new Product(30L, "Iphone 12 PRO MAX", apple, iphoneDetails);
@@ -78,8 +79,8 @@ public class ProductServiceTest {
     public void findById() {
         //given
         Company sony = new Company(50L, "SONY");
-        Map<String, String> playstationDetails =
-                Map.of("weight", "4 kg", "power", "330", "color", "glacier white");
+        List<Detail> playstationDetails =
+               Detail.of("weight", "4 kg", "power", "330", "color", "glacier white");
         Product playStation = new Product(20L, "PS5", sony, playstationDetails);
 
         //when
@@ -97,10 +98,10 @@ public class ProductServiceTest {
         Company sony = new Company(50L, "SONY");
         Company apple = new Company(60L, "Apple");
 
-        Map<String, String> playstationDetails =
-                Map.of("weight", "4 kg", "original", "yes", "power", "330", "color", "glacier white");
-        Map<String, String> iphoneDetails =
-                Map.of("weight", "200 grams", "original", "yes", "color", "rose gold");
+        List<Detail> playstationDetails =
+               Detail.of("weight", "4 kg", "original", "yes", "power", "330", "color", "glacier white");
+        List<Detail> iphoneDetails =
+               Detail.of("weight", "200 grams", "original", "yes", "color", "rose gold");
 
         Product playStation = new Product(20L, "PS5", sony, playstationDetails);
         Product iphone = new Product(30L, "Iphone 12 PRO MAX", apple, iphoneDetails);
