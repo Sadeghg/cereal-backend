@@ -10,7 +10,7 @@ public class ShopItem {
 
     @Id
     @SequenceGenerator(name = "cuteSequence", sequenceName = "cuteSequence"
-            , initialValue = 1, allocationSize = 10)
+            , initialValue = 1, allocationSize = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSequence")
     private Long id;
 
@@ -18,7 +18,7 @@ public class ShopItem {
     @ManyToOne(fetch = FetchType.EAGER)
     private Shop shop;
 
-    @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "company_fk_id"), nullable = false)
+    @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "company_shop_fk_id"), nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
 

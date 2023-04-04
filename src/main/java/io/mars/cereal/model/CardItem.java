@@ -7,10 +7,14 @@ import lombok.Data;
 @Entity
 public class CardItem {
 
+    public static CardItem cardItem(){
+        return new CardItem();
+    }
+
     @Id
     @SequenceGenerator(name="cuteSequence", sequenceName = "cuteSequence"
-            , initialValue = 1, allocationSize = 10)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+            , initialValue = 1, allocationSize = 50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSequence")
     private Long id;
 
     @Column(name = "item_quantity", nullable = false)

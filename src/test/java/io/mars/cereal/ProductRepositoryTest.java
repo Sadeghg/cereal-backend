@@ -1,5 +1,7 @@
 package io.mars.cereal;
 
+import com.mysql.cj.conf.LongProperty;
+import io.mars.cereal.data.company.CompanyRepository;
 import io.mars.cereal.data.product.ProductRepository;
 import io.mars.cereal.model.Company;
 import io.mars.cereal.model.Detail;
@@ -13,23 +15,30 @@ import static org.mockito.Mockito.*;
 
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-@ExtendWith(MockitoExtension.class)
+@DataJpaTest
+@ExtendWith(SpringExtension.class)
 public class ProductRepositoryTest {
 
     private List<Product> products;
-    @Mock
-    private ProductRepository repository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @BeforeEach
     public void setRepository(){
-        Company lg = new Company(40L,"LG");
-        Company sony = new Company(50L, "SONY");
-        Company apple = new Company(60L, "Apple");
+        Company lg = new Company("LG");
+        Company sony = new Company( "SONY");
+        Company apple = new Company( "Apple");
 
         List<Detail> tvDetails =
                Detail.of("weight", "2 kg", "original", "yes", "power", "130");
@@ -38,66 +47,74 @@ public class ProductRepositoryTest {
         List<Detail> iphoneDetails =
                Detail.of("weight", "200 grams", "original", "yes", "color", "rose gold");
 
-        Product oledTv = new Product(10L, "OLED TV", lg, tvDetails);
-        Product playStation = new Product(20L, "PS5", sony, playstationDetails);
-        Product iphone = new Product(30L, "Iphone 12 PRO MAX", apple, iphoneDetails);
+        Product oledTv = new Product("OLED TV", lg, tvDetails);
+        Product playStation = new Product("PS5", sony, playstationDetails);
+        Product iphone = new Product("Iphone 12 PRO MAX", apple, iphoneDetails);
 
-        products = List.of(oledTv, playStation, iphone);
+        companyRepository.saveAll(List.of(lg, sony, apple));
+        productRepository.saveAll(List.of(oledTv, iphone, playStation));
     }
 
     @Test
     public void saveProduct(){
         //given
-        Product product = new Product("TV");
+        Company lg = new Company(40L,"LG");
+        List<Detail> tvDetails =
+                Detail.of("screen size", "27 Inch", "Refresh rate", "120 Hz", "Resolution", "1920*1080");
+        Product product = new Product("Gamin TV", lg, tvDetails);
+        String productName = product.getName();
 
         //when
-        when(repository.save(any(Product.class))).thenReturn(product);
+        Product saveResult = productRepository.save(product);
 
         //then
-        Product saveResult = repository.save(product);
-        assertNull(saveResult.getId());
-        assertEquals(saveResult.getName(), product.getName());
+        assertNotNull(saveResult.getId());
+        assertEquals(saveResult.getName(),productName);
     }
 
     @Test
     public void findById(){
         //given
-        Product product = products.get(0);
+        Long productId = 4L; //1 for singleton test
+        String productName = "OLED TV";
+        Integer detailsSize = 3;
 
         //when
-        when(repository.findById(anyLong())).thenReturn(Optional.of(product));
+        Product result = productRepository.findById(productId)
+                .orElseGet(Product::new);
 
         //then
-        Optional<Product> result = repository.findById(anyLong());
-        assertTrue(result.isPresent());
-        assertEquals(result.get().getDetails().size() , 3);
-        assertEquals(result.get().getName(), product.getName());
+        assertEquals(result.getDetails().size() , detailsSize);
+        assertEquals(result.getName(), productName);
     }
 
     @Test
     public void updateProduct(){
         //given
-        Product product = products.get(0);
-        Company sony = new Company(50L , "SONY");
+        Long productId = 1L;
+        Product product = productRepository.findById(productId)
+                .orElseGet(Product::new);
+        String previousName = product.getName();
 
         //when
-        Product updateProduct = new Product(product.getId(), product.getName(), sony, product.getDetails());
-        when(repository.save(any(Product.class))).thenReturn(updateProduct);
+        product.setName("Gaming TV");
+        Product updateProduct = productRepository.save(product);
 
         //then
-        Product result = repository.save(updateProduct);
-        assertEquals(result.getId(), product.getId());
-        assertNotEquals(result.getCompany().getId(), product.getCompany().getId());
+        assertEquals(updateProduct.getId(), productId);
+        assertNotEquals(updateProduct.getName(), previousName);
     }
 
     @Test
     void deleteById(){
         //given
+        Long productId = 12L;
 
         //when
+        productRepository.deleteById(productId);
+        Optional<Product> result = productRepository.findById(productId);
 
         //then
-        repository.deleteById(anyLong());
-        verify(repository).deleteById(anyLong());
+        assertTrue(result.isEmpty());
     }
 }

@@ -11,7 +11,7 @@ public class Invoice {
 
     @Id
     @SequenceGenerator(name = "cuteSequence", sequenceName = "cuteSequence"
-            , initialValue = 1, allocationSize = 10)
+            , initialValue = 1, allocationSize = 50)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSequence")
     private Long id;
 

@@ -1,6 +1,6 @@
 package io.mars.cereal.model;
 
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,13 +9,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Embeddable
+@Entity
 @NoArgsConstructor
-@AllArgsConstructor
 public class Detail {
 
-    private String key;
-    private String value;
+    @Id
+    @SequenceGenerator(name = "cuteSequence", sequenceName = "cuteSequence"
+            , initialValue = 1, allocationSize = 50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSequence")
+    private Long id;
+
+    private String detailKey;
+    private String detailValue;
+
+    public Detail(String key, String value) {
+        this.detailKey = key;
+        this.detailValue = value;
+    }
 
     public static Detail of(String key, String value){
         return new Detail(key, value);

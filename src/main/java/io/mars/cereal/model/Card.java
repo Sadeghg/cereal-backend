@@ -9,8 +9,8 @@ public class Card {
 
     @Id
     @SequenceGenerator(name="cuteSequence", sequenceName = "cuteSequence"
-            , initialValue = 1, allocationSize = 10)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+            , initialValue = 1, allocationSize = 50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSequence")
     private Long id;
 
 }
