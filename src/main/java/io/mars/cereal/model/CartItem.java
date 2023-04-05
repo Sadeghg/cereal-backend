@@ -20,9 +20,7 @@ public class CartItem {
     @ManyToOne(fetch = FetchType.EAGER)
     private Cart cart;
 
-    @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "product_item_fk_id"))
+    @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "product_card_item_fk_id"))
     @ManyToOne(fetch = FetchType.EAGER)
     private ShopItem item;
-
-
 }

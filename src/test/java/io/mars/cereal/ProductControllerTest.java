@@ -1,6 +1,5 @@
 package io.mars.cereal;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import io.mars.cereal.controller.ProductController;
@@ -8,8 +7,6 @@ import io.mars.cereal.model.Company;
 import io.mars.cereal.model.Detail;
 import io.mars.cereal.model.Product;
 import io.mars.cereal.service.product.ProductService;
-import org.aspectj.lang.annotation.Before;
-import org.hamcrest.Matcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,13 +16,8 @@ import org.mockito.Mock;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -34,13 +26,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
-import java.util.Map;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductControllerTest {
 
-    private ObjectMapper mapper = new ObjectMapper();
-    private ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectWriter writer = mapper.writer().withDefaultPrettyPrinter();
     private MockMvc mockMvc;
 
     private List<Product> productList;
@@ -90,6 +81,7 @@ public class ProductControllerTest {
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.name", is("PS5")));
+        verify(service).save(playStation);
     }
 
     @Test
@@ -101,7 +93,7 @@ public class ProductControllerTest {
         Product playStation = new Product(20L, "PS4", sony, playstationDetails);
 
         //when
-        when(service.findById(20L)).thenReturn(playStation);
+        when(service.find(20L)).thenReturn(playStation);
 
         //then
         mockMvc.perform(get("/api/product/{id}", "20")
@@ -109,6 +101,7 @@ public class ProductControllerTest {
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(jsonPath(("$"), notNullValue()))
                 .andExpect(jsonPath("$.name", is("PS4")));
+        verify(service).find(20L);
     }
 
     @Test

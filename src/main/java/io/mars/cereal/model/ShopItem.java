@@ -18,7 +18,7 @@ public class ShopItem {
     @ManyToOne(fetch = FetchType.EAGER)
     private Shop shop;
 
-    @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "company_shop_fk_id"), nullable = false)
+    @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "product_shop_item_fk_id"), nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
 

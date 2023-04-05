@@ -2,7 +2,7 @@ package io.mars.cereal.service.company;
 
 import io.mars.cereal.data.company.CompanyRepository;
 import io.mars.cereal.model.Company;
-import io.mars.cereal.model.exception.ContentNotFound;
+import io.mars.cereal.model.exception.ContentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +23,9 @@ public class CompanyServiceImpl implements CompanyService{
     }
 
     @Override
-    public Company findById(Long id) {
+    public Company find(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ContentNotFound("no such company found"));
+                .orElseThrow(() -> new ContentNotFoundException("no such company found"));
     }
 
     @Override

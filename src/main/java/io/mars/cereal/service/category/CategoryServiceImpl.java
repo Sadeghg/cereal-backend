@@ -2,8 +2,7 @@ package io.mars.cereal.service.category;
 
 import io.mars.cereal.data.category.CategoryRepository;
 import io.mars.cereal.model.Category;
-import io.mars.cereal.model.exception.ContentNotFound;
-import io.mars.cereal.service.generic.GenericService;
+import io.mars.cereal.model.exception.ContentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +22,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category findById(Long id) {
+    public Category find(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(()-> new ContentNotFound("no such category found"));
+                .orElseThrow(()-> new ContentNotFoundException("no such category found"));
     }
 
     @Override

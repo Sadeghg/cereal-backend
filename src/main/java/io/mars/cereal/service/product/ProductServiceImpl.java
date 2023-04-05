@@ -1,11 +1,8 @@
 package io.mars.cereal.service.product;
 
-import io.mars.cereal.data.company.CompanyRepository;
 import io.mars.cereal.data.product.ProductRepository;
-import io.mars.cereal.model.Company;
 import io.mars.cereal.model.Product;
-import io.mars.cereal.model.exception.ContentNotFound;
-import io.mars.cereal.service.company.CompanyService;
+import io.mars.cereal.model.exception.ContentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +24,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findById(Long id) {
+    public Product find(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ContentNotFound("no such product found"));
+                .orElseThrow(() -> new ContentNotFoundException("no such product found"));
     }
 
     @Override

@@ -15,7 +15,7 @@ public class CompanyController {
 
     @GetMapping("{id}")
     public ResponseEntity<Company> find(@PathVariable Long id) {
-        return ResponseEntity.ok(service.findById(id));
+        return ResponseEntity.ok(service.find(id));
     }
 
     @PostMapping("save")

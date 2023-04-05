@@ -2,7 +2,7 @@ package io.mars.cereal.service.shop;
 
 import io.mars.cereal.data.shop.ShopRepository;
 import io.mars.cereal.model.Shop;
-import io.mars.cereal.model.exception.ContentNotFound;
+import io.mars.cereal.model.exception.ContentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +23,9 @@ public class ShopServiceImpl implements ShopService{
     }
 
     @Override
-    public Shop findById(Long id) {
+    public Shop find(Long id) {
         return shopRepository.findById(id)
-                .orElseThrow(()-> new ContentNotFound("no such shop found"));
+                .orElseThrow(()-> new ContentNotFoundException("no such shop found"));
     }
 
     @Override

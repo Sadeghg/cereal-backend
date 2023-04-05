@@ -1,14 +1,12 @@
 package io.mars.cereal.service.generic;
 
-import java.util.Collection;
-
 public interface GenericService <T, ID>{
 
     T save(T t);
 
     Iterable<T> saveAll(Iterable<T> t);
 
-    T findById(ID id);
+    T find(ID id);
 
     Iterable<T> findAllById(Iterable<ID> ids);
 

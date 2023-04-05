@@ -21,11 +21,11 @@ public class Invoice {
             joinColumns = {@JoinColumn(
                     name = "invoice_id",
                     referencedColumnName = "id",
-                    foreignKey = @ForeignKey(name = "invoice_fk"))},
+                    foreignKey = @ForeignKey(name = "invoice_fk_id"))},
             inverseJoinColumns = {@JoinColumn(
                     name = "invoice_item_id",
                     referencedColumnName = "id",
-                    foreignKey = @ForeignKey(name = "invoice_item_fk")
+                    foreignKey = @ForeignKey(name = "invoice_item_fk_id")
             )})
     private List<CartItem> invoiceItemList;
 

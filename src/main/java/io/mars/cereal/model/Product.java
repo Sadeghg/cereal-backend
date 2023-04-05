@@ -38,11 +38,11 @@ public class Product {
             joinColumns = {@JoinColumn(
                     name = "product_id",
                     referencedColumnName = "id",
-                    foreignKey = @ForeignKey(name = "product_details_fk"))},
+                    foreignKey = @ForeignKey(name = "product_details_fk_id"))},
             inverseJoinColumns = {@JoinColumn(
                     name = "detail_id",
                     referencedColumnName = "id",
-                    foreignKey = @ForeignKey(name = "detail_fk")
+                    foreignKey = @ForeignKey(name = "detail_fk_id")
             )})
     private List<Detail> details;
 }

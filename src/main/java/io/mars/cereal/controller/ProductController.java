@@ -14,22 +14,22 @@ public class ProductController {
     private final ProductService service;
 
     @GetMapping("{id}")
-    public ResponseEntity<Product> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(service.findById(id));
+    public ResponseEntity<Product> find(@PathVariable Long id) {
+        return ResponseEntity.ok(service.find(id));
     }
 
     @PostMapping("save")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public ResponseEntity<Product> save(@RequestBody Product product) {
         return ResponseEntity.ok(service.save(product));
     }
 
     @PutMapping("update")
-    public ResponseEntity<Product> updateProduct(@RequestBody Product product) {
+    public ResponseEntity<Product> update(@RequestBody Product product) {
         return ResponseEntity.ok(service.save(product));
     }
 
     @DeleteMapping("delete/{id}")
-    public void deleteProduct(@PathVariable  Long id) {
+    public void delete(@PathVariable  Long id) {
         service.delete(id);
     }
 }

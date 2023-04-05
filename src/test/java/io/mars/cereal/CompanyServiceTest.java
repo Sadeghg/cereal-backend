@@ -61,7 +61,7 @@ public class CompanyServiceTest {
         when(repository.findById(anyLong())).thenReturn(Optional.of(lg));
 
         //then
-        Company result = service.findById(60L);
+        Company result = service.find(60L);
         assertNotNull(result.getId());
         verify(repository).findById(60L);
     }

@@ -19,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -87,7 +86,7 @@ public class ProductServiceTest {
         when(repository.findById(anyLong())).thenReturn(Optional.of(playStation));
 
         //then
-        Product result = productService.findById(playStation.getId());
+        Product result = productService.find(playStation.getId());
         verify(repository).findById(playStation.getId());
         assertEquals(playStation.getId(), result.getId());
     }
