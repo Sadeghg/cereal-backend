@@ -29,7 +29,7 @@ public class Product {
     @Column(name = "product_name", columnDefinition = "TEXT")
     private String name;
 
-    @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "company_fk_id"), nullable = false)
+    @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "company_fk_id"))
     @ManyToOne(fetch = FetchType.EAGER)
     private Company company;
 
