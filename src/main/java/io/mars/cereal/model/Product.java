@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Data
 @Entity
@@ -45,4 +46,17 @@ public class Product {
                     foreignKey = @ForeignKey(name = "detail_fk_id")
             )})
     private List<Detail> details;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "categories_for_product",
+            joinColumns = {@JoinColumn(
+                    name = "product_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "product_category_fk_id"))},
+            inverseJoinColumns = {@JoinColumn(
+                    name = "category_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "category_of_product_fk_id")
+            )})
+    private Set<Category> categories;
 }

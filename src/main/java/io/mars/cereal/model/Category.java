@@ -7,6 +7,7 @@ import java.util.Set;
 
 @Data
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Category {
 
     @Id
@@ -30,17 +31,4 @@ public class Category {
                     foreignKey = @ForeignKey(name = "child_category_fk_id")
             )})
     private Set<Category> children;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "products_in_category",
-            joinColumns = {@JoinColumn(
-                    name = "category_id",
-                    referencedColumnName = "id",
-                    foreignKey = @ForeignKey(name = "category_of_product_fk_id"))},
-            inverseJoinColumns = {@JoinColumn(
-                    name = "product_id",
-                    referencedColumnName = "id",
-                    foreignKey = @ForeignKey(name = "product_category_fk_id")
-            )})
-    private Set<Product> products;
 }

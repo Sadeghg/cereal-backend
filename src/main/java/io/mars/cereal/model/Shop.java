@@ -3,6 +3,8 @@ package io.mars.cereal.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 @Entity
 public class Shop {
@@ -14,4 +16,17 @@ public class Shop {
     private Long id;
     private String name;
     private String description;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "categories_for_shop",
+            joinColumns = {@JoinColumn(
+                    name = "shop_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "shop_category_fk_id"))},
+            inverseJoinColumns = {@JoinColumn(
+                    name = "category_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "category_of_shop_fk_id")
+            )})
+    private Set<Category> categories;
 }
