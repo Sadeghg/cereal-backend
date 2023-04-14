@@ -2,12 +2,19 @@ package io.mars.cereal.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Shop {
+
+    public Shop(String name, String description){
+        this.description = description;
+        this.name = name;
+    }
 
     @Id
     @SequenceGenerator(name = "cuteSequence", sequenceName = "cuteSequence"
@@ -15,6 +22,8 @@ public class Shop {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSequence")
     private Long id;
     private String name;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @ManyToMany(fetch = FetchType.LAZY)

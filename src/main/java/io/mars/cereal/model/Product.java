@@ -24,7 +24,7 @@ public class Product {
     @Id
     @SequenceGenerator(name = "cuteSequence", sequenceName = "cuteSequence"
             , initialValue = 1, allocationSize = 50)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSequence")
     private Long id;
 
     @Column(name = "product_name", columnDefinition = "TEXT")
@@ -34,7 +34,7 @@ public class Product {
     @ManyToOne(fetch = FetchType.EAGER)
     private Company company;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinTable(name = "product_details",
             joinColumns = {@JoinColumn(
                     name = "product_id",
