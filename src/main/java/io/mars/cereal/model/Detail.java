@@ -1,7 +1,6 @@
 package io.mars.cereal.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,15 +26,15 @@ public class Detail {
         this.detailValue = value;
     }
 
-    public static Detail of(String key, String value){
+    public static Detail of(String key, String value) {
         return new Detail(key, value);
     }
 
-    public static List<Detail> of(String...keyValues){
+    public static List<Detail> of(String... keyValues) {
         List<Detail> details = new ArrayList<>();
-        for (int index = 0; index < keyValues.length; index += 2){
+        for (int index = 0; index < keyValues.length; index += 2) {
             String key = keyValues[index];
-            String value = keyValues[index +1];
+            String value = keyValues[index + 1];
             details.add(Detail.of(key, value));
         }
         return details;

@@ -15,16 +15,16 @@ import java.util.Set;
 @AllArgsConstructor
 public class Product {
 
-    public Product(String name, Company company, List<Detail> details){
+    public Product(String name, Company company, List<Detail> details) {
         this.details = details;
         this.company = company;
         this.name = name;
     }
 
     @Id
-    @SequenceGenerator(name = "cuteSequence", sequenceName = "cuteSequence"
-            , initialValue = 1, allocationSize = 50)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSequence")
+    @SequenceGenerator(name = "cuteSeq", sequenceName = "cute_seq"
+            , initialValue = 1, allocationSize = 27)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSeq")
     private Long id;
 
     @Column(name = "product_name", columnDefinition = "TEXT")

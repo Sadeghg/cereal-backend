@@ -13,14 +13,14 @@ import java.util.Set;
 @AllArgsConstructor
 public class Company {
 
-    public Company(String name){
+    public Company(String name) {
         this.name = name;
     }
 
     @Id
-    @SequenceGenerator(name = "cuteSequence", sequenceName = "cuteSequence"
-            , initialValue = 1, allocationSize = 50)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSequence")
+    @SequenceGenerator(name = "cuteSeq", sequenceName = "cute_seq"
+            , initialValue = 1, allocationSize = 27)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSeq")
     private Long id;
 
     @Column(name = "company_name", columnDefinition = "TEXT")

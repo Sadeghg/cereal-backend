@@ -2,31 +2,46 @@ package io.mars.cereal.service;
 
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.RandomService;
+import io.mars.cereal.data.cart.CartRepository;
+import io.mars.cereal.data.cartitem.CartItemRepository;
 import io.mars.cereal.data.category.CategoryRepository;
 import io.mars.cereal.data.company.CompanyRepository;
+import io.mars.cereal.data.invoice.InvoiceRepository;
+import io.mars.cereal.data.order.OrderRepository;
 import io.mars.cereal.data.product.ProductRepository;
 import io.mars.cereal.data.shop.ShopRepository;
 import io.mars.cereal.data.shopitem.ShopItemRepository;
 import io.mars.cereal.model.*;
+import io.mars.cereal.model.enums.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Component
+@Transactional
 @RequiredArgsConstructor
 public class InitialDataSeedService implements CommandLineRunner {
 
     private final CategoryRepository categoryRepository;
     private final ShopItemRepository shopItemRepository;
+    private final CartItemRepository cartItemRepository;
     private final CompanyRepository companyRepository;
     private final ProductRepository productRepository;
+    private final InvoiceRepository invoiceRepository;
+    private final OrderRepository orderRepository;
     private final ShopRepository shopRepository;
+    private final CartRepository cartRepository;
+
     private final Faker faker = new Faker();
     private final RandomService rand = faker.random();
 
@@ -38,6 +53,9 @@ public class InitialDataSeedService implements CommandLineRunner {
 
         saveProducts();
         saveShopItems();
+
+        saveCart();
+        saveInvoice();
         System.out.println("do whatever it takes");
     }
 
@@ -47,23 +65,20 @@ public class InitialDataSeedService implements CommandLineRunner {
         List<Category> firstSubCategories = new ArrayList<>();
         List<Category> secondSubCategories = new ArrayList<>();
 
-        IntStream.range(0, 10).forEach(n -> {
+        IntStream.range(0, 10).forEach(value -> {
             Category category = new Category(faker.name().title());
             mainCategories.add(category);
         });
 
-        IntStream.range(0, 73).forEach(n -> {
-            Category subCategory = new Category(faker.name().title(),
-                    Set.of(mainCategories.get(rand.nextInt(0, 9)),
-                            mainCategories.get(rand.nextInt(0, 9))));
+        IntStream.range(0, 73).forEach(value -> {
+            Set<Category> children = getCategories(mainCategories, 2, 9);
+            Category subCategory = new Category(faker.name().title(), children);
             firstSubCategories.add(subCategory);
         });
 
-        IntStream.range(0, 500).forEach(n -> {
-            Category subCategory = new Category(faker.name().title(),
-                    Set.of(firstSubCategories.get(rand.nextInt(0, 72)),
-                            firstSubCategories.get(rand.nextInt(0, 72)),
-                            firstSubCategories.get(rand.nextInt(0, 72))));
+        IntStream.range(0, 500).forEach(value -> {
+            Set<Category> children = getCategories(firstSubCategories, 3, 72);
+            Category subCategory = new Category(faker.name().title(), children);
             secondSubCategories.add(subCategory);
         });
 
@@ -150,6 +165,62 @@ public class InitialDataSeedService implements CommandLineRunner {
         shopItemRepository.saveAll(items);
     }
 
+    private void saveCart() {
+
+        List<ShopItem> items = (List<ShopItem>) shopItemRepository.findAll();
+        List<Cart> carts = new ArrayList<>();
+        List<CartItem> cartItems = new ArrayList<>();
+        IntStream.range(0, 173).forEach(value -> {
+            carts.add(new Cart(rand.nextInt(1, 10000).doubleValue(), randomDate()));
+
+        });
+
+        cartRepository.saveAll(carts);
+        List<Cart> savedCarts = (List<Cart>) cartRepository.findAll();
+
+        savedCarts.forEach(cart -> {
+            IntStream.range(0, rand.nextInt(2, 9)).forEach(value -> {
+                ShopItem shopItem = items.get(rand.nextInt(0, 1700));
+                CartItem cartItem = new CartItem(rand.nextInt(1, 7), cart, shopItem);
+                cartItems.add(cartItem);
+            });
+        });
+        cartItemRepository.saveAll(cartItems);
+    }
+
+    private void saveInvoice() {
+
+        List<Invoice> invoices = new ArrayList<>();
+        List<CartItem> cartItems = (List<CartItem>) cartItemRepository.findAll();
+
+        Map<Cart, List<CartItem>> carts = cartItems.stream().collect(Collectors.groupingBy(CartItem::getCart));
+
+        carts.keySet().forEach(cart -> {
+
+            List<InvoiceItem> itemsInCard = carts.get(cart).stream()
+                    .map(InvoiceItem::new).toList();
+
+            Double totalPrice = itemsInCard.stream()
+                    .mapToDouble(InvoiceItem::getPrice).reduce(0D, Double::sum);
+
+            invoices.add(new Invoice(totalPrice, itemsInCard));
+        });
+
+        invoiceRepository.saveAll(invoices);
+    }
+
+    private void saveOrders(){
+        List<Order> orders = new ArrayList<>();
+        List<Cart> cartItems = cartRepository.findCartsWithPriceBetween(300D, 7000D);
+
+        cartItems.forEach(cart ->{
+            Order order = new Order(cart);
+            order.setStatus(OrderStatus.values()[rand.nextInt(0, 3)]);
+            orders.add(order);
+        });
+        orderRepository.saveAll(orders);
+    }
+
     private List<Detail> getDetails(int amount) {
 
         List<Detail> details = new ArrayList<>();
@@ -159,6 +230,32 @@ public class InitialDataSeedService implements CommandLineRunner {
         return details;
     }
 
-    private void testSavedData(){
+    private Set<Category> getCategories(List<Category> categories, int amount, int offset) {
+        Set<Category> result = new HashSet<>();
+        for (int i = 0; i < amount; i++) {
+            Category nominee = categories.get(rand.nextInt(0, offset));
+            if (!result.isEmpty() && result.contains(nominee)) {
+                i--;
+            } else {
+                result.add(nominee);
+            }
+        }
+        return result;
+    }
+
+    private LocalDateTime randomDate() {
+        LocalDateTime start = LocalDateTime.now().minusYears(3);
+        LocalDateTime end = LocalDateTime.now().plusMonths(1);
+        return between(start, end);
+    }
+
+    private LocalDateTime between(LocalDateTime startInclusive, LocalDateTime endExclusive) {
+
+        long startInstant = startInclusive.toInstant(ZoneOffset.UTC).getEpochSecond();
+        long endInstant = endExclusive.toInstant(ZoneOffset.UTC).getEpochSecond();
+        long randomSecond = ThreadLocalRandom
+                .current()
+                .nextLong(startInstant, endInstant);
+        return LocalDateTime.ofEpochSecond(randomSecond, 1000, ZoneOffset.UTC);
     }
 }

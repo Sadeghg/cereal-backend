@@ -18,9 +18,9 @@ public class ShopItem {
     }
 
     @Id
-    @SequenceGenerator(name = "cuteSequence", sequenceName = "cuteSequence"
-            , initialValue = 1, allocationSize = 50)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSequence")
+    @SequenceGenerator(name = "cuteSeq", sequenceName = "cute_seq"
+            , initialValue = 1, allocationSize = 27)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSeq")
     private Long id;
 
     @JoinColumn(name = "shop_id", foreignKey = @ForeignKey(name = "shop_fk_id"), nullable = false)

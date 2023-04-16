@@ -2,13 +2,21 @@ package io.mars.cereal.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class CartItem {
 
+    public CartItem(Integer quantity, Cart cart, ShopItem item){
+        this.quantity = quantity;
+        this.cart = cart;
+        this.item = item;
+    }
+
     @Id
-    @SequenceGenerator(name="cuteSeq", sequenceName = "cute_seq"
+    @SequenceGenerator(name = "cuteSeq", sequenceName = "cute_seq"
             , initialValue = 1, allocationSize = 27)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSeq")
     private Long id;
