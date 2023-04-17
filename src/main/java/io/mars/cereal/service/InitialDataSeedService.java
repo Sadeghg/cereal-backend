@@ -1,6 +1,8 @@
 package io.mars.cereal.service;
 
+import com.github.javafaker.Animal;
 import com.github.javafaker.Faker;
+import com.github.javafaker.Job;
 import com.github.javafaker.service.RandomService;
 import io.mars.cereal.data.cart.CartRepository;
 import io.mars.cereal.data.cartitem.CartItemRepository;
@@ -64,30 +66,65 @@ public class InitialDataSeedService implements CommandLineRunner {
 
         if (cartRepository.count() != 0) return;
 
+        Job job = faker.job();
+        Animal animal = faker.animal();
+
         List<Category> mainCategories = new ArrayList<>();
         List<Category> firstSubCategories = new ArrayList<>();
         List<Category> secondSubCategories = new ArrayList<>();
+        List<Category> thirdSubCategories = new ArrayList<>();
+        List<Category> fourthSubCategories = new ArrayList<>();
+        List<Category> fifthSubCategories = new ArrayList<>();
+        List<Category> sixthSubCategories = new ArrayList<>();
 
         IntStream.range(0, 10).forEach(value -> {
-            Category category = new Category(faker.name().title());
+            Category category = new Category(job.field());
             mainCategories.add(category);
         });
 
-        IntStream.range(0, 73).forEach(value -> {
+        IntStream.range(0, 51).forEach(value -> {
             Set<Category> children = getCategories(mainCategories, 2, 9);
-            Category subCategory = new Category(faker.name().title(), children);
+            Category subCategory = new Category(animal.name(), children);
             firstSubCategories.add(subCategory);
         });
 
-        IntStream.range(0, 500).forEach(value -> {
-            Set<Category> children = getCategories(firstSubCategories, 3, 72);
-            Category subCategory = new Category(faker.name().title(), children);
+        IntStream.range(0, 91).forEach(value -> {
+            Set<Category> children = getCategories(firstSubCategories, 3, 50);
+            Category subCategory = new Category(job.title(), children);
             secondSubCategories.add(subCategory);
+        });
+
+        IntStream.range(0, 131).forEach(value -> {
+            Set<Category> children = getCategories(secondSubCategories, 3, 90);
+            Category subCategory = new Category(job.title(), children);
+            thirdSubCategories.add(subCategory);
+        });
+
+        IntStream.range(0, 201).forEach(value -> {
+            Set<Category> children = getCategories(thirdSubCategories, 3, 130);
+            Category subCategory = new Category(job.title(), children);
+            fourthSubCategories.add(subCategory);
+        });
+
+        IntStream.range(0, 291).forEach(value -> {
+            Set<Category> children = getCategories(fourthSubCategories, 3, 200);
+            Category subCategory = new Category(job.title(), children);
+            fifthSubCategories.add(subCategory);
+        });
+
+        IntStream.range(0, 421).forEach(value -> {
+            Set<Category> children = getCategories(fifthSubCategories, 3, 290);
+            Category subCategory = new Category(job.title(), children);
+            sixthSubCategories.add(subCategory);
         });
 
         categoryRepository.saveAll(mainCategories);
         categoryRepository.saveAll(firstSubCategories);
         categoryRepository.saveAll(secondSubCategories);
+        categoryRepository.saveAll(thirdSubCategories);
+        categoryRepository.saveAll(fourthSubCategories);
+        categoryRepository.saveAll(fifthSubCategories);
+        categoryRepository.saveAll(sixthSubCategories);
     }
 
 
@@ -99,9 +136,9 @@ public class InitialDataSeedService implements CommandLineRunner {
         List<Category> mainCategories = categoryRepository.findMainCategories();
         List<Shop> shops = new ArrayList<>();
 
-        IntStream.range(0, 93).forEach(n -> {
-            List<Category> categoryList = List.of(mainCategories.get(rand.nextInt(9)),
-                    categories.get(rand.nextInt(0, 500)));
+        IntStream.range(0, 73).forEach(n -> {
+            List<Category> categoryList = List.of(mainCategories.get(rand.nextInt(mainCategories.size() -1)),
+                    categories.get(rand.nextInt(0, categories.size() -1)));
             shops.add(new Shop(faker.company().name(), faker.friends().quote(), categoryList));
         });
 
@@ -117,8 +154,8 @@ public class InitialDataSeedService implements CommandLineRunner {
         List<Company> companies = (List<Company>) companyRepository.findAll();
 
         IntStream.range(0, 37).forEach(n -> {
-            List<Category> categoryList =List.of(mainCategories.get(rand.nextInt(9)),
-                    categories.get(rand.nextInt(0, 490)));
+            List<Category> categoryList =List.of(mainCategories.get(rand.nextInt(mainCategories.size() -1)),
+                    categories.get(rand.nextInt(0, categories.size() -1)));
             companies.add(new Company(faker.company().name(), categoryList));
         });
 
@@ -136,11 +173,11 @@ public class InitialDataSeedService implements CommandLineRunner {
 
         List<Product> products = new ArrayList<>();
 
-        IntStream.range(0, 1372).forEach(n -> {
+        IntStream.range(0, 3172).forEach(n -> {
             String productName = faker.commerce().productName();
             Company  company = companies.get(rand.nextInt(0, 36));
-            List<Category> categoryList = List.of(mainCategories.get(rand.nextInt(9)),
-                    categories.get(rand.nextInt(0, 500)));
+            List<Category> categoryList = List.of(mainCategories.get(rand.nextInt(mainCategories.size() -1)),
+                    categories.get(rand.nextInt(0, categories.size() -1)));
             products.add(new Product(productName, company,
                     getDetails(rand.nextInt(3, 7)), categoryList));
         });
@@ -161,10 +198,16 @@ public class InitialDataSeedService implements CommandLineRunner {
 
         productList.forEach(product -> {
             IntStream.range(2, rand.nextInt(9)).forEach(number -> {
-                List<Category> categoryList = List.of(mainCategories.get(rand.nextInt(9)),
-                        categories.get(rand.nextInt(0, 500)));
-                items.add(new ShopItem(shopList.get(rand.nextInt(0, 90)), product,
-                        rand.nextDouble() * 100, rand.nextLong(100), categoryList));
+                List<Category> categoryList = List.of(mainCategories.get(rand.nextInt(mainCategories.size() -1)),
+                        categories.get(rand.nextInt(0, categories.size() -1)));
+                List<ProductPrice> prices = new ArrayList<>();
+                LocalDateTime priceDate = randomDate();
+                IntStream.range(3, 9).forEach(value -> {
+                    prices.add(new ProductPrice(rand.nextDouble() * 100,
+                            priceDate.minusDays(value + rand.nextInt(10, 500))));
+                });
+                items.add(new ShopItem(shopList.get(rand.nextInt(0, shopList.size() -1)), product, rand.nextLong(100),
+                        prices.get(0).getPrice(), prices, categoryList));
             });
         });
         shopItemRepository.saveAll(items);
@@ -178,8 +221,9 @@ public class InitialDataSeedService implements CommandLineRunner {
         List<Cart> carts = new ArrayList<>();
         List<CartItem> cartItems = new ArrayList<>();
         IntStream.range(0, 173).forEach(value -> {
-            carts.add(new Cart(rand.nextInt(1, 10000).doubleValue(), randomDate()));
-
+            LocalDateTime purchasedDate = randomDate();
+            LocalDateTime addDate = purchasedDate.minusMinutes(rand.nextInt(5, 700));
+            carts.add(new Cart(rand.nextInt(1, 10000).doubleValue(), purchasedDate, addDate));
         });
 
         cartRepository.saveAll(carts);

@@ -11,7 +11,8 @@ import java.util.Set;
 @Repository
 public interface CategoryRepository extends CrudRepository<Category, Long> {
 
-    @Query("SELECT category FROM Category category WHERE category.name LIKE %:start%")
+    @Query("SELECT category FROM Category category WHERE category.title" +
+            " LIKE %:start%")
     Set<Category> findByNameLike(String  start);
 
     @Query(value = "SELECT * FROM category c WHERE c.id NOT IN " +

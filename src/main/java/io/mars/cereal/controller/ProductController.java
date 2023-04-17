@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/product/")
@@ -16,6 +18,11 @@ public class ProductController {
     @GetMapping("{id}")
     public ResponseEntity<Product> find(@PathVariable Long id) {
         return ResponseEntity.ok(service.find(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Product>> find(@RequestParam String categoryTitle) {
+        return ResponseEntity.ok(service.findByCategory(categoryTitle));
     }
 
     @PostMapping("save")

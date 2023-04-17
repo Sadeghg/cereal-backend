@@ -6,6 +6,10 @@ import io.mars.cereal.model.exception.ContentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static io.mars.cereal.data.product.ProductSpecification.categoryTitle;
+
 
 @Service
 @RequiredArgsConstructor
@@ -44,5 +48,8 @@ public class ProductServiceImpl implements ProductService {
         repository.deleteById(id);
     }
 
-
+    @Override
+    public List<Product> findByCategory(String categoryTitle) {
+        return repository.findAll(categoryTitle(categoryTitle));
+    }
 }
