@@ -5,14 +5,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 
+import java.util.List;
+import java.util.Set;
+
 @Data
 @Entity
 @NoArgsConstructor
 public class ShopItem {
 
-    public ShopItem(Shop shop, Product product, Double price, Long quantity){
+    public ShopItem(Shop shop, Product product, Long quantity, Double price,
+                    List<ProductPrice> prices, List<Category> categories){
+        this.categories = categories;
         this.quantity = quantity;
         this.product = product;
+        this.prices = prices;
         this.price = price;
         this.shop = shop;
     }
@@ -36,4 +42,30 @@ public class ShopItem {
 
     @Column(name = "product_quantity", nullable = false)
     private Long quantity;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinTable(name = "prices_for_shop_item",
+            joinColumns = {@JoinColumn(
+                    name = "shop_item_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "shop_item_price_fk_id"))},
+            inverseJoinColumns = {@JoinColumn(
+                    name = "category_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "price_of_shop_item_fk_id")
+            )})
+    private List<ProductPrice> prices;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "categories_for_shop_item",
+            joinColumns = {@JoinColumn(
+                    name = "shop_item_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "shop_item_category_fk_id"))},
+            inverseJoinColumns = {@JoinColumn(
+                    name = "category_id",
+                    referencedColumnName = "id",
+                    foreignKey = @ForeignKey(name = "category_of_shop_item_fk_id")
+            )})
+    private List<Category> categories;
 }

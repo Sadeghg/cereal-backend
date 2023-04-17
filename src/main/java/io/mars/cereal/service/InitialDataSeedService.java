@@ -56,10 +56,13 @@ public class InitialDataSeedService implements CommandLineRunner {
 
         saveCart();
         saveInvoice();
+        saveOrders();
         System.out.println("do whatever it takes");
     }
 
     private void saveCategories() {
+
+        if (cartRepository.count() != 0) return;
 
         List<Category> mainCategories = new ArrayList<>();
         List<Category> firstSubCategories = new ArrayList<>();
@@ -90,17 +93,16 @@ public class InitialDataSeedService implements CommandLineRunner {
 
     private void saveShops() {
 
+        if (shopRepository.count() != 0) return;
+
         List<Category> categories = categoryRepository.findSubCategories();
         List<Category> mainCategories = categoryRepository.findMainCategories();
         List<Shop> shops = new ArrayList<>();
 
         IntStream.range(0, 93).forEach(n -> {
-            Shop shop = new Shop(faker.company().name(), faker.friends().quote());
-            Set<Category> categoryList = new HashSet<>();
-            categoryList.add(mainCategories.get(rand.nextInt(9)));
-            categoryList.add(categories.get(rand.nextInt(0, 500)));
-            shop.setCategories(categoryList);
-            shops.add(shop);
+            List<Category> categoryList = List.of(mainCategories.get(rand.nextInt(9)),
+                    categories.get(rand.nextInt(0, 500)));
+            shops.add(new Shop(faker.company().name(), faker.friends().quote(), categoryList));
         });
 
         shopRepository.saveAll(shops);
@@ -108,17 +110,16 @@ public class InitialDataSeedService implements CommandLineRunner {
 
     private void saveCompanies() {
 
+        if (companyRepository.count() != 0) return;
+
         List<Category> categories = categoryRepository.findSubCategories();
         List<Category> mainCategories = categoryRepository.findMainCategories();
         List<Company> companies = (List<Company>) companyRepository.findAll();
 
         IntStream.range(0, 37).forEach(n -> {
-            Company company = new Company(faker.company().name());
-            Set<Category> categoryList = new HashSet<>();
-            categoryList.add(mainCategories.get(rand.nextInt(9)));
-            categoryList.add(categories.get(rand.nextInt(0, 490)));
-            company.setCategories(categoryList);
-            companies.add(company);
+            List<Category> categoryList =List.of(mainCategories.get(rand.nextInt(9)),
+                    categories.get(rand.nextInt(0, 490)));
+            companies.add(new Company(faker.company().name(), categoryList));
         });
 
         companyRepository.saveAll(companies);
@@ -127,6 +128,8 @@ public class InitialDataSeedService implements CommandLineRunner {
 
     private void saveProducts() {
 
+        if (productRepository.count() != 0) return;
+
         List<Category> categories = categoryRepository.findSubCategories();
         List<Category> mainCategories = categoryRepository.findMainCategories();
         List<Company> companies = (List<Company>) companyRepository.findAll();
@@ -134,15 +137,12 @@ public class InitialDataSeedService implements CommandLineRunner {
         List<Product> products = new ArrayList<>();
 
         IntStream.range(0, 1372).forEach(n -> {
-            Product product = new Product(faker.company().name(),
-                    companies.get(rand.nextInt(0, 36)), getDetails(rand.nextInt(3, 7)));
-            Set<Category> categoryList = new HashSet<>();
-            Category main = mainCategories.get(rand.nextInt(9));
-            Category sub = categories.get(rand.nextInt(0, 500));
-            categoryList.add(main);
-            categoryList.add(sub);
-            product.setCategories(categoryList);
-            products.add(product);
+            String productName = faker.commerce().productName();
+            Company  company = companies.get(rand.nextInt(0, 36));
+            List<Category> categoryList = List.of(mainCategories.get(rand.nextInt(9)),
+                    categories.get(rand.nextInt(0, 500)));
+            products.add(new Product(productName, company,
+                    getDetails(rand.nextInt(3, 7)), categoryList));
         });
 
         productRepository.saveAll(products);
@@ -150,6 +150,10 @@ public class InitialDataSeedService implements CommandLineRunner {
 
     private void saveShopItems() {
 
+        if (shopItemRepository.count() != 0) return;
+
+        List<Category> categories = categoryRepository.findSubCategories();
+        List<Category> mainCategories = categoryRepository.findMainCategories();
         List<Shop> shopList = (List<Shop>) shopRepository.findAll();
         List<Product> productList = (List<Product>) productRepository.findAll();
 
@@ -157,15 +161,18 @@ public class InitialDataSeedService implements CommandLineRunner {
 
         productList.forEach(product -> {
             IntStream.range(2, rand.nextInt(9)).forEach(number -> {
-                ShopItem item = new ShopItem(shopList.get(rand.nextInt(0, 90)),
-                        product, rand.nextDouble() * 100, rand.nextLong(100));
-                items.add(item);
+                List<Category> categoryList = List.of(mainCategories.get(rand.nextInt(9)),
+                        categories.get(rand.nextInt(0, 500)));
+                items.add(new ShopItem(shopList.get(rand.nextInt(0, 90)), product,
+                        rand.nextDouble() * 100, rand.nextLong(100), categoryList));
             });
         });
         shopItemRepository.saveAll(items);
     }
 
     private void saveCart() {
+
+        if (cartRepository.count() != 0) return;
 
         List<ShopItem> items = (List<ShopItem>) shopItemRepository.findAll();
         List<Cart> carts = new ArrayList<>();
@@ -190,30 +197,31 @@ public class InitialDataSeedService implements CommandLineRunner {
 
     private void saveInvoice() {
 
+        if (invoiceRepository.count() != 0) return;
+
         List<Invoice> invoices = new ArrayList<>();
         List<CartItem> cartItems = (List<CartItem>) cartItemRepository.findAll();
-
         Map<Cart, List<CartItem>> carts = cartItems.stream().collect(Collectors.groupingBy(CartItem::getCart));
 
         carts.keySet().forEach(cart -> {
-
             List<InvoiceItem> itemsInCard = carts.get(cart).stream()
                     .map(InvoiceItem::new).toList();
-
             Double totalPrice = itemsInCard.stream()
                     .mapToDouble(InvoiceItem::getPrice).reduce(0D, Double::sum);
-
             invoices.add(new Invoice(totalPrice, itemsInCard));
         });
 
         invoiceRepository.saveAll(invoices);
     }
 
-    private void saveOrders(){
+    private void saveOrders() {
+
+        if (orderRepository.count() != 0) return;
+
         List<Order> orders = new ArrayList<>();
         List<Cart> cartItems = cartRepository.findCartsWithPriceBetween(300D, 7000D);
 
-        cartItems.forEach(cart ->{
+        cartItems.forEach(cart -> {
             Order order = new Order(cart);
             order.setStatus(OrderStatus.values()[rand.nextInt(0, 3)]);
             orders.add(order);

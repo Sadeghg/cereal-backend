@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -11,6 +12,12 @@ import java.util.Set;
 @NoArgsConstructor
 public class Shop {
 
+    public Shop(String name, String description,
+                List<Category> categories){
+        this.description = description;
+        this.categories = categories;
+        this.name = name;
+    }
     public Shop(String name, String description){
         this.description = description;
         this.name = name;
@@ -38,5 +45,5 @@ public class Shop {
                     referencedColumnName = "id",
                     foreignKey = @ForeignKey(name = "category_of_shop_fk_id")
             )})
-    private Set<Category> categories;
+    private List<Category> categories;
 }

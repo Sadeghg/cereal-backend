@@ -3,7 +3,6 @@ package io.mars.cereal.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -14,11 +13,11 @@ public class Category {
 
     public Category(String name, Set<Category> children) {
         this.children = children;
-        this.name = name;
+        this.title = name;
     }
 
     public Category(String name) {
-        this.name = name;
+        this.title = name;
     }
 
     @Id
@@ -27,7 +26,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSeq")
     private Long id;
 
-    private String name;
+    private String title;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "categories_prent_child",

@@ -11,8 +11,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Cart {
 
-    public Cart(Double totalPrice, LocalDateTime purchaseDate){
+    public Cart(Double totalPrice, LocalDateTime purchaseDate, LocalDateTime addDate){
         this.purchaseDate = purchaseDate;
+        this.addDate = addDate;
         this.totalPrice = totalPrice;
     }
 
@@ -31,4 +32,7 @@ public class Cart {
 
     @Column(name = "purchase_date", columnDefinition = "TIMESTAMP")
     private LocalDateTime purchaseDate;
+
+    @Column(name = "add_date", columnDefinition = "TIMESTAMP")
+    private LocalDateTime addDate;
 }

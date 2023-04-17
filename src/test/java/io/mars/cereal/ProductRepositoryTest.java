@@ -47,9 +47,9 @@ public class ProductRepositoryTest {
         List<Detail> iphoneDetails =
                Detail.of("weight", "200 grams", "original", "yes", "color", "rose gold");
 
-        Product oledTv = new Product("OLED TV", lg, tvDetails);
-        Product playStation = new Product("PS5", sony, playstationDetails);
-        Product iphone = new Product("Iphone 12 PRO MAX", apple, iphoneDetails);
+        Product oledTv = new Product("OLED TV", lg, tvDetails, null);
+        Product playStation = new Product("PS5", sony, playstationDetails, null);
+        Product iphone = new Product("Iphone 12 PRO MAX", apple, iphoneDetails, null);
 
         companyRepository.saveAll(List.of(lg, sony, apple));
         productRepository.saveAll(List.of(oledTv, iphone, playStation));

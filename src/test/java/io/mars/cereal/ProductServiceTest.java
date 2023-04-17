@@ -37,7 +37,7 @@ public class ProductServiceTest {
         Company sony = new Company(50L, "SONY");
         List<Detail> playstationDetails =
                Detail.of("weight", "4 kg", "power", "330", "color", "glacier white");
-        Product playStation = new Product(20L, "PS5", sony, playstationDetails);
+        Product playStation = new Product(20L, "PS5", sony, playstationDetails, null);
 
         //when
         when(repository.save(any())).thenReturn(playStation);
@@ -61,8 +61,8 @@ public class ProductServiceTest {
         List<Detail> iphoneDetails =
                Detail.of("weight", "200 grams", "original", "yes", "color", "rose gold");
 
-        Product playStation = new Product(20L, "PS5", sony, playstationDetails);
-        Product iphone = new Product(30L, "Iphone 12 PRO MAX", apple, iphoneDetails);
+        Product playStation = new Product(20L, "PS5", sony, playstationDetails, null);
+        Product iphone = new Product(30L, "Iphone 12 PRO MAX", apple, iphoneDetails, null);
         Collection<Product> products = List.of(playStation, iphone);
 
         //when
@@ -80,7 +80,7 @@ public class ProductServiceTest {
         Company sony = new Company(50L, "SONY");
         List<Detail> playstationDetails =
                Detail.of("weight", "4 kg", "power", "330", "color", "glacier white");
-        Product playStation = new Product(20L, "PS5", sony, playstationDetails);
+        Product playStation = new Product(20L, "PS5", sony, playstationDetails, null);
 
         //when
         when(repository.findById(anyLong())).thenReturn(Optional.of(playStation));
@@ -102,8 +102,8 @@ public class ProductServiceTest {
         List<Detail> iphoneDetails =
                Detail.of("weight", "200 grams", "original", "yes", "color", "rose gold");
 
-        Product playStation = new Product(20L, "PS5", sony, playstationDetails);
-        Product iphone = new Product(30L, "Iphone 12 PRO MAX", apple, iphoneDetails);
+        Product playStation = new Product(20L, "PS5", sony, playstationDetails, null);
+        Product iphone = new Product(30L, "Iphone 12 PRO MAX", apple, iphoneDetails, null);
         Collection<Product> products = List.of(playStation, iphone);
 
         //when

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -12,6 +13,16 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Company {
+
+    public Company(String name, List<Category> categories) {
+        this.categories = categories;
+        this.name = name;
+    }
+
+    public Company(Long id, String name) {
+        this.name = name;
+        this.id = id;
+    }
 
     public Company(String name) {
         this.name = name;
@@ -37,6 +48,6 @@ public class Company {
                     referencedColumnName = "id",
                     foreignKey = @ForeignKey(name = "category_of_company_fk_id")
             )})
-    private Set<Category> categories;
+    private List<Category> categories;
 
 }

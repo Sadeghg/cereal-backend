@@ -15,7 +15,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class Product {
 
-    public Product(String name, Company company, List<Detail> details) {
+    public Product(String name, Company company, List<Detail> details, List<Category> categories) {
+        this.categories = categories;
         this.details = details;
         this.company = company;
         this.name = name;
@@ -58,5 +59,5 @@ public class Product {
                     referencedColumnName = "id",
                     foreignKey = @ForeignKey(name = "category_of_product_fk_id")
             )})
-    private Set<Category> categories;
+    private List<Category> categories;
 }
