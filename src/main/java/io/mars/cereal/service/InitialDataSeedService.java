@@ -190,24 +190,25 @@ public class InitialDataSeedService implements CommandLineRunner {
         if (shopItemRepository.count() != 0) return;
 
         List<Category> categories = categoryRepository.findSubCategories();
-        List<Category> mainCategories = categoryRepository.findMainCategories();
         List<Shop> shopList = (List<Shop>) shopRepository.findAll();
         List<Product> productList = (List<Product>) productRepository.findAll();
 
         List<ShopItem> items = new ArrayList<>();
 
-        productList.forEach(product -> {
-            IntStream.range(2, rand.nextInt(9)).forEach(number -> {
-                List<Category> categoryList = List.of(mainCategories.get(rand.nextInt(mainCategories.size() -1)),
-                        categories.get(rand.nextInt(0, categories.size() -1)));
+        productList.forEach(product -> {;
+            IntStream.range(0, rand.nextInt(2, 21)).forEach(number -> {
+                List<Category> itemCategories = new ArrayList<>();
+                IntStream.range(0, rand.nextInt(2, 9)).forEach(value ->
+                        itemCategories.add(categories.get(rand.nextInt(categories.size() -1))));
                 List<ProductPrice> prices = new ArrayList<>();
                 LocalDateTime priceDate = randomDate();
                 IntStream.range(3, 9).forEach(value -> {
                     prices.add(new ProductPrice(rand.nextDouble() * 100,
                             priceDate.minusDays(value + rand.nextInt(10, 500))));
                 });
-                items.add(new ShopItem(shopList.get(rand.nextInt(0, shopList.size() -1)), product, rand.nextLong(100),
-                        prices.get(0).getPrice(), prices, categoryList));
+                items.add(new ShopItem(shopList.get(rand.nextInt(0, shopList.size() -1)),
+                                product, rand.nextLong(100),
+                        prices.get(0).getPrice(), prices, itemCategories));
             });
         });
         shopItemRepository.saveAll(items);
