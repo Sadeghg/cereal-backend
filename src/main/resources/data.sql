@@ -1,48 +1,133 @@
-USE cereal;
-#Main Categories
-INSERT INTO category (id, name)
-VALUES (1, 'mobile and electronic'), (2, 'house and furniture'),
-       (3, 'fashion and clothing'), (4, 'grocery and supermarket'),
-       (5, 'art and stationery'), (6, 'sports and travel'),
-       (7, 'native and local products'), (8, 'industrial construction tools'),
-       (9, 'cars and motorcycles'), (10, 'beauty and health');
+drop database cereal;
+create database cereal;
+use cereal;
+create table counters
+(
+    id char(8) primary key
+);
 
-#First Layer - Sub categories (electronics)
-INSERT INTO category (id, name)
-VALUES (11, 'mobile'), (12, 'tablet'), (13, 'laptop'), (14, 'pc'),
-       (15, 'phone and tablet accessories'), (16,  'mouse'),
-       (17, 'keyboard'), (18, 'speaker'), (19, 'cable');
+create table seed
+(
+    id int primary key
+);
+insert into seed
+values (0),
+       (1),
+       (2),
+       (3),
+       (4),
+       (5),
+       (6),
+       (7),
+       (8),
+       (9);
+
+insert into counters
+select concat(s1.id, s2.id, s3.id) as n
+from seed as s1,
+     seed as s2,
+     seed as s3;
+
+insert into category(title, parent_id)
+select concat('category-parent-', counter_id), null
+from (select id as counter_id
+      from counters limit 12) t;
+
+insert into category(title, parent_id)
+select concat('subcategory-level-one-', category_id, counter_id), category_id
+from (select categories.id as category_id, counters.id as counter_id
+      from (
+                   (select id from category) categories,
+                       (select id from counters limit 27) counters
+               )) t;
+
+insert into category(title, parent_id)
+select concat('subcategory-level-two-', category_id, counter_id), category_id
+from (select categories.id as category_id, counters.id as counter_id
+      from (
+                   (select id from category where parent_id is not null) categories,
+                       (select id from counters limit 51) counters
+               )) t;
+
+insert into company(company_name)
+select concat('company-', counter_id)
+from (select id as counter_id
+      from counters limit 37) t;
+
+insert into categories_for_company(company_id, category_id)
+select company_id, category_id
+from (select companies.id as company_id, categories.id as category_id
+      from (
+                   (select id from company) companies,
+                       (select * from (  select * from category limit 12) as subquery order by rand() limit 3) categories
+               )) t;
+
+insert into shop(name)
+select concat('shop-', counter_id)
+from (select id as counter_id
+      from counters limit 400) t;
 
 
-# electronics relation
-INSERT INTO categories_prent_child (parent_id, child_id)
-VALUES (1, 11), (1, 12), (1, 13), (1, 14);
+insert into categories_for_shop(shop_id, category_id)
+select shop_id, category_id
+from (select shops.id as shop_id, categories.id as category_id
+      from (
+                   (select id from shop) shops,
+                   (select * from (  select * from category limit 270 offset  12) as subquery order by rand() limit 17) categories
+               )) t;
 
-INSERT INTO categories_prent_child (parent_id, child_id)
-VALUES (14, 15), (14, 16), (14, 17), (14, 18), (14, 19);
+insert into product(product_name, company_id)
+select concat('product-', company_id, counter_id), company_id
+from (select companies.id as company_id, counters.id as counter_id
+      from (
+                   (select id from company) companies,
+                       (select id from counters limit 120) counters
+               )) t;
 
-INSERT INTO categories_prent_child (parent_id, child_id)
-VALUES (11, 15), (11, 18), (11, 19);
+insert into categories_for_product(product_id, category_id)
+select product_id, category_id
+from (select products.id as product_id, categories.id as category_id
+      from (
+               (select id from product) products,
+                   (select * from (  select * from category limit 17000 offset  300) as subquery order by rand() limit 11) categories
+               )) t;
 
-INSERT INTO categories_prent_child (parent_id, child_id)
-VALUES (12, 15), (12, 18), (12, 17);
+insert into categories_for_product(product_id, category_id)
+select product_id, category_id
+from (select products.id as product_id, categories.id as category_id
+      from (
+               (select id from product) products,
+                   (select * from (  select * from category limit 17000 offset  300) as subquery order by rand() limit 7) categories
+               )) t;
 
-INSERT INTO categories_prent_child (parent_id, child_id)
-VALUES (13, 15), (13, 16), (13, 17), (13, 18), (13, 19);
+insert into shop_item(product_price, product_quantity, product_id, shop_id)
+select floor(rand() * (10000 - 3 + 1) + 3), floor(rand() * (1000 - 20 + 1) + 20), product_id, shop_id
+from (select products.id as product_id, shops.id as shop_id
+      from (
+               (select id from shop order by rand() limit 57) shops,
+               (select id from product order by rand() limit 700) products
+               )) t;
 
-INSERT INTO shop (id, description,  name)
-VALUES (20, 'iran biggest online shop', 'digikala'),
-       (21, 'all hail to the one', 'amazon'),
-       (22, 'nice mid average clothes shop', 'jeanwest'),
-       (23, 'great shop that provides all types of clothes', 'banimode');
+insert into shop_item(product_price, product_quantity, product_id, shop_id)
+select floor(rand() * (10000 - 3 + 1) + 3), floor(rand() * (100 - 20 + 1) + 20), product_id, shop_id
+from (select products.id as product_id, shops.id as shop_id
+      from (
+               (select id from shop order by rand() limit 143) shops,
+                   (select id from product order by rand() limit 100) products
+               )) t;
 
-INSERT INTO company (id, company_name)
-VALUES (24, 'LG'), (25, 'Jeanwest'), (26, 'SONY'), (27, 'Apple'), (28, 'Gucci');
+insert into shop_item(product_price, product_quantity, product_id, shop_id)
+select floor(rand() * (10000 - 3 + 1) + 3), floor(rand() * (70 - 20 + 1) + 20), product_id, shop_id
+from (select products.id as product_id, shops.id as shop_id
+      from (
+               (select id from shop order by rand() limit 157) shops,
+                   (select id from product order by rand() limit 20) products
+               )) t;
 
-INSERT INTO product (id, product_name, company_id)
-VALUES (29, 'Playstation 5', 26), (30, 'Gaming Tv', 24), (31, 'Iphone 12 Pro Max', 27), (32, 'Shirt', 25);
-
-UPDATE cute_sequence SET next_val = 33;
-
- DROP DATABASE cereal;
- CREATE DATABASE cereal;
+insert into categories_for_shop_item(shop_item_id, category_id)
+select shop_id, category_id
+from (select categories.id as category_id, shop_items.id as shop_id
+      from (
+               (select id from shop_item) shop_items,
+                   (select * from (  select * from category limit 17000 offset  300) as subquery order by rand() limit 7) categories
+               )) t;

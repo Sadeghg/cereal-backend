@@ -24,9 +24,7 @@ public class Shop {
     }
 
     @Id
-    @SequenceGenerator(name = "cuteSeq", sequenceName = "cute_seq"
-            , initialValue = 1, allocationSize = 27)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSeq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;

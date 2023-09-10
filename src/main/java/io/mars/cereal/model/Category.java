@@ -11,8 +11,8 @@ import java.util.Set;
 @NoArgsConstructor
 public class Category {
 
-    public Category(String name, Set<Category> children) {
-        this.children = children;
+    public Category(String name, Category parent) {
+        this.parent = parent;
         this.title = name;
     }
 
@@ -21,23 +21,12 @@ public class Category {
     }
 
     @Id
-    @SequenceGenerator(name = "cuteSeq", sequenceName = "cute_seq"
-            , initialValue = 1, allocationSize = 27)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSeq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "categories_prent_child",
-            joinColumns = {@JoinColumn(
-                    name = "child_id",
-                    referencedColumnName = "id",
-                    foreignKey = @ForeignKey(name = "parent_category_fk_id"))},
-            inverseJoinColumns = {@JoinColumn(
-                    name = "parent_id",
-                    referencedColumnName = "id",
-                    foreignKey = @ForeignKey(name = "child_of_shop_fk_id")
-            )})
-    private Set<Category> children;
+    @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "parent_fk_id"))
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Category parent;
 }

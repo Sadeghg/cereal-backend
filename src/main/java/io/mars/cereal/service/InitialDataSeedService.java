@@ -49,16 +49,16 @@ public class InitialDataSeedService implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        saveCategories();
-        saveCompanies();
-        saveShops();
+//        saveCategories();
+//        saveCompanies();
+//        saveShops();
 
-        saveProducts();
-        saveShopItems();
+//        savePr/oducts();
+//        saveShpItems();
 
-        saveCart();
-        saveInvoice();
-        saveOrders();
+//        saveCart();
+//        saveInvoice();
+//        saveOrders();
         System.out.println("do whatever it takes");
     }
 
@@ -82,41 +82,7 @@ public class InitialDataSeedService implements CommandLineRunner {
             mainCategories.add(category);
         });
 
-        IntStream.range(0, 51).forEach(value -> {
-            Set<Category> children = getCategories(mainCategories, 2, 9);
-            Category subCategory = new Category(animal.name(), children);
-            firstSubCategories.add(subCategory);
-        });
 
-        IntStream.range(0, 91).forEach(value -> {
-            Set<Category> children = getCategories(firstSubCategories, 3, 50);
-            Category subCategory = new Category(job.title(), children);
-            secondSubCategories.add(subCategory);
-        });
-
-        IntStream.range(0, 131).forEach(value -> {
-            Set<Category> children = getCategories(secondSubCategories, 3, 90);
-            Category subCategory = new Category(job.title(), children);
-            thirdSubCategories.add(subCategory);
-        });
-
-        IntStream.range(0, 201).forEach(value -> {
-            Set<Category> children = getCategories(thirdSubCategories, 3, 130);
-            Category subCategory = new Category(job.title(), children);
-            fourthSubCategories.add(subCategory);
-        });
-
-        IntStream.range(0, 291).forEach(value -> {
-            Set<Category> children = getCategories(fourthSubCategories, 3, 200);
-            Category subCategory = new Category(job.title(), children);
-            fifthSubCategories.add(subCategory);
-        });
-
-        IntStream.range(0, 421).forEach(value -> {
-            Set<Category> children = getCategories(fifthSubCategories, 3, 290);
-            Category subCategory = new Category(job.title(), children);
-            sixthSubCategories.add(subCategory);
-        });
 
         categoryRepository.saveAll(mainCategories);
         categoryRepository.saveAll(firstSubCategories);

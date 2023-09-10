@@ -3,9 +3,7 @@ package io.mars.cereal.data;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 public class GenericSpecification {

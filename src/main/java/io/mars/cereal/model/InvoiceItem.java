@@ -17,9 +17,7 @@ public class InvoiceItem {
     }
 
     @Id
-    @SequenceGenerator(name = "cuteSeq", sequenceName = "cute_seq"
-            , initialValue = 1, allocationSize = 27)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cuteSeq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JoinColumn(name = "product_id", foreignKey = @ForeignKey(name = "shop_item_invoice_fk_id"))

@@ -61,7 +61,7 @@ public class ProductRepositoryTest {
         Company lg = new Company(40L,"LG");
         List<Detail> tvDetails =
                 Detail.of("screen size", "27 Inch", "Refresh rate", "120 Hz", "Resolution", "1920*1080");
-        Product product = new Product("Gamin TV", lg, tvDetails);
+        Product product = new Product("Gamin TV", lg, tvDetails, null);
         String productName = product.getName();
 
         //when

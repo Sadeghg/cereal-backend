@@ -1,5 +1,6 @@
 package io.mars.cereal.controller;
 
+import io.mars.cereal.data.TestRepository;
 import io.mars.cereal.model.Product;
 import io.mars.cereal.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService service;
+    private final TestRepository testRepository;
 
     @GetMapping("{id}")
     public ResponseEntity<Product> find(@PathVariable Long id) {
@@ -33,6 +35,11 @@ public class ProductController {
     @PutMapping("update")
     public ResponseEntity<Product> update(@RequestBody Product product) {
         return ResponseEntity.ok(service.save(product));
+    }
+
+    @GetMapping("test")
+    public void test() {
+        testRepository.critetira();
     }
 
     @DeleteMapping("delete/{id}")
