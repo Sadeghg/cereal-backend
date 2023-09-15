@@ -34,7 +34,7 @@ public class BatchConfig {
 
     @Bean
     public JdbcCursorItemReader<Category> jdbcCategoryReader() {
-        JdbcCursorItemReader<Category> reader = new JpaCursorItemReader<>();
+        JdbcCursorItemReader<Category> reader = new JdbcCursorItemReader<>();
         reader.setSql("SELECT id, title, parent_id FROM category");
         reader.setRowMapper(new BeanPropertyRowMapper<>());
         reader.setDataSource(dataSource);
@@ -54,7 +54,8 @@ public class BatchConfig {
 
     @Bean
     public Step executeSteo(JobRepository jobRepository){
-        return new StepBuilder("category-csv-step", jobRepository)
-                .<>chunk(10).reader(jdbcCategoryReader()).processor(writer());
+        return null;
+//                new StepBuilder("category-csv-step", jobRepository)
+//                .<>chunk(10).reader(jdbcCategoryReader()).processor(writer());
     }
 }
